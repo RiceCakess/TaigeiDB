@@ -1,0 +1,36 @@
+.ammo{
+	background-image: url(../assets/kcIcons/ammo.png);
+}
+.fuel{
+	background-image: url(../assets/kcIcons/fuel.png);
+}
+.steel{
+	background-image: url(../assets/kcIcons/steel.png);
+}
+.bauxite{
+	background-image: url(../assets/kcIcons/bauxite.png);
+}
+.material{
+	background-image: url(../assets/kcIcons/dev.png);
+}
+.kcIcon{
+	display: inline-block;
+}
+.kcIcon.ammo, .kcIcon.fuel, .kcIcon.steel,.kcIcon.bauxite, .kcIcon.material {
+	width: 18px;
+	height: 18px;
+}
+
+.kcIcon.Arank, .kcIcon.Brank, .kcIcon.Srank  {
+	width: 26px;
+	height: 26px;
+}
+.Arank{
+	background-image: url(../assets/kcIcons/ratings/A.png);
+}
+.Brank{
+	background-image: url(../assets/kcIcons/ratings/B.png);
+}
+.Srank{
+	background-image: url(../assets/kcIcons/ratings/S.png);
+}

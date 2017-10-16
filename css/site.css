@@ -1,0 +1,139 @@
+body{
+	background: url('../assets/tile.png');
+	//background-size: 15%;
+}
+*{
+	border-radius: 0px !important;
+}
+.navbar{
+	background-color: #4E4063;
+	min-height: 64px;
+}
+.content{
+	min-height: 100%;
+}
+.table th{
+	border-top: none;
+}
+.search-section{
+	height: 100%;
+	position: relative;
+	background: url('../assets/background.jpg') center no-repeat;
+	background-position: center 34%;
+	overflow: hidden;
+	
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.overlay{
+	background-color: black;
+	opacity: .6;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	left: 0;
+    top: 0;
+	//z-index: -1;
+}
+/* ship.php */
+.construction-table  td, .construction-table  th,
+.drop-table td, .drop-table th
+{
+	text-align: center;
+}
+.loadingFairy{
+	padding-top: 50px;
+	text-align: center;
+}
+.loadingFairy > img{
+	width: 200px;
+	animation: bounce .75s infinite alternate;
+}
+.loadingFairy > div{
+	font-size: 18px;
+	font-weight: 600px;
+}
+.row{
+	background-color: #FEFEFF;
+	min-height: 100%;
+	padding: 10px;
+	padding-top: 84px;
+	border-left: 3px solid #39456B;
+	border-right: 3px solid #39456B;
+	box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+}
+.ship-info-col, .ship-data-col{
+	text-align: center;
+}
+.ship-data-col{
+	border-left: 1px solid #39456B;
+}
+.ship-no{
+	position: absolute;
+	font-size: 100px;
+	top: 64px;
+	left: 64px;
+	font-style: italic;
+	z-index: -1;
+	opacity: .5;
+}
+.ship-bg{
+	position: absolute;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	top: 64px;
+	right: 0;
+	z-index: -1;
+	opacity: .5;
+	max-height: 100%;
+}
+.ship-data-nav{
+	border-bottom: 2px solid #39456B;
+}
+.ship-data-nav .nav-item.show .nav-link,.nav-tabs .nav-link{
+    color: #125E8F;
+    border-color: #39456B;
+	border-width: 2px 2px 0 2px;
+}
+.ship-data-nav .nav-item.show .nav-link,.nav-tabs .nav-link:hover{
+    border-color: #125E8F;
+}
+.ship-data-nav .nav-item.show .nav-link,.nav-tabs .nav-link.active{
+    color: white;
+    background: #39456B;
+	border-color: #39456B;
+	border-width: 2px 2px 0 2px;
+}
+.ship-bg{
+	overflow: hidden;
+}
+.tab-content{
+	margin-top: 10px;
+}
+@-webkit-keyframes spin {
+    0%  {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg);}   
+}
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-30px);
+  }
+}
+.mobile-tb-hide > *:nth-child(2) {
+    display: none;
+}
+@media (max-width: 992px) {
+   .ship-data-col{
+		border-left: none;
+		margin-top: 2rem;
+   }
+   .container{
+		min-width: 100%;
+   }
+}
