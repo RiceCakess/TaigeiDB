@@ -15,20 +15,25 @@ else
 	error(400,"Invalid Ship ID");
 
 if(isset($_GET['lsc'])){
-	if($_GET['lsc'] === "true")
-		$lsc = true;
-	else
-		error(400,'To see LSC results, set "lsc"=true');
+	switch($_GET['lsc']){
+		case "true": 
+			$lsc = true; break;
+		case "false": 
+			$lsc = false; break;
+		default:
+			error(400,'To see LSC results, set "lsc"=true');
+	}
 }
-$where = "AND T1.fuel < 800
-		AND T1.ammo < 800
-		AND T1.steel < 800
-		AND T1.bauxite < 800";
+
+$where = "AND T1.fuel < 1000
+		AND T1.ammo < 1000
+		AND T1.steel < 1000
+		AND T1.bauxite < 1000";
 if($lsc){
-	$where = "AND T1.fuel > 800
-		AND T1.ammo > 800
-		AND T1.steel > 800
-		AND T1.bauxite > 800";
+	$where = "AND T1.fuel > 1000
+		AND T1.ammo > 1000
+		AND T1.steel > 1000
+		AND T1.bauxite > 1000";
 }
 $sql = "SELECT fuel,ammo,steel,bauxite,material,COUNT(*) AS `totalCount`,
 		(SELECT COUNT(*) 

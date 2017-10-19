@@ -19,6 +19,12 @@ if(isset($_GET['request']) && $method === "GET"){
 		case "equip_dev":
 			require $routeDir . "equip_dev.php";
 			break;
+		case "ship_dev/flagship":
+			require $routeDir . "ship_dev_flagship.php";
+			break;
+		case "equip_dev/flagship":
+			require $routeDir . "equip_dev_flagship.php";
+			break;
 		default: http_response_code(404);
 	}
 	return;

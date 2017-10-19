@@ -1,13 +1,14 @@
 <?php
+require 'util/config.php';
+$conn = mysqli_connect($DBServer, $DBUser, $DBPass, $infoDB);
 $assetPath = "assets/KanColleAssets/";
-require_once ('util/info_db.php');
 $id = 0;
 if(isset($_GET["id"])){
 	$id = $_GET["id"];
 }
 
-$sql = "SELECT * FROM ships WHERE id=" . $infoConn->real_escape_string($id);
-$rs = $infoConn->query($sql);
+$sql = "SELECT * FROM ships WHERE id=" . $conn->real_escape_string($id);
+$rs = $conn->query($sql);
 $no = $asset = $name = $type = $suffix = $wiki = 0;
 if($rs){
 	$row = $rs->fetch_assoc();
@@ -21,43 +22,59 @@ if($rs){
 		<?php require_once ('includes/head.php');?>
 		<script src="js/common.js"></script>
 		<script>
-			$(document).ready(function(){
-				var dropBuilt = false;
-				fetchConstructionData();
-				$("a[href='#drop']").click(function(){
-					if(!dropBuilt){
-						buildDropTable();
-						dropBuilt = true;
-					}
-				});
+		$(document).ready(function(){
+			var dropBuilt = false;
+			fetchConstructionData();
+			$("a[href='#drop']").click(function(){
+				if(!dropBuilt){
+					buildDropTable();
+					dropBuilt = true;
+				}
 			});
+		});
 		function fetchConstructionData(){
 			var fairy = addLoadingFairy("#construction");
-			$.get("api/ship_dev",{id: <?php echo $id ?>, limit:10}).done(function(res) {
-				$(fairy).remove();
-				var table = $(".construction-table > tbody");
-				if(res.data.length == 0){
-					var alert = $("<div/>")
-								.addClass("alert alert-danger")
-								.attr("role","alert")
-								.text("This ship is currently not constructable!");
-					$("#construction").prepend(alert);
-					return;
-				}
-				res.data.forEach(function(obj){
-					percent = (obj.count/obj.attempts) *100;
-					var row = $("<tr/>")
-						.append("<td>" + obj.fuel + "</td>")
-						.append("<td>" + obj.ammo + "</td>")
-						.append("<td>" + obj.steel + "</td>")
-						.append("<td>" + obj.bauxite + "</td>")
-						.append("<td>" + obj.material + "</td>")
-						.append("<td>" + obj.count + "</td>")
-						.append("<td>" + obj.attempts + "</td>")
-						.append("<td>" + round(percent,4) +"%" + "</td>");
-						table.append(row);
+			var firstEmpty = false;
+			$.get("api/ship_dev",{id: <?php echo $id ?>, limit:10, lsc:false}).done(function(res) {
+				var table = $(".construction-table#dev > tbody");
+				if(res.data.length == 0)
+					firstEmpty = true;
+				else
+					appendData(table,res.data);
+			}).done(function(){
+				$.get("api/ship_dev",{id: <?php echo $id ?>, limit:10, lsc:true}).done(function(res) {
+					$(fairy).remove();
+					var table = $(".construction-table#lsc > tbody");
+					if(res.data.length == 0 && firstEmpty){
+						var alert = $("<div/>")
+							.addClass("alert alert-danger")
+							.attr("role","alert")
+							.text("This ship is currently not constructable!");
+						$("#construction").prepend(alert);
+						return;
+					}
+					appendData(table,res.data);
+					
+					if(!firstEmpty)
+						$(".construction-table#dev").show();
+					if(res.data.length > 0)
+						table.parent().show();
 				});
-				$(".construction-table").show();
+			});
+		}
+		function appendData(table,data){
+			data.forEach(function(obj){
+				percent = (obj.count/obj.attempts) *100;
+				var row = $("<tr/>")
+					.append("<td>" + obj.fuel + "</td>")
+					.append("<td>" + obj.ammo + "</td>")
+					.append("<td>" + obj.steel + "</td>")
+					.append("<td>" + obj.bauxite + "</td>")
+					.append("<td>" + obj.material + "</td>")
+					.append("<td>" + obj.count + "</td>")
+					.append("<td>" + obj.attempts + "</td>")
+					.append("<td>" + round(percent,4) +"%" + "</td>");
+				table.append(row);
 			});
 		}
 		var difficulty = ["","E","N","H"];
@@ -126,7 +143,24 @@ if($rs){
 						</ul>
 						<div class="tab-content">
 							<div id="construction" class="tab-pane active" role="tabpanel">
-								<table class="table table-responsive construction-table table-striped" style="display: none;">
+								<table class="table table-responsive construction-table" style="display: none;" id="dev">
+									<thead>
+										<tr>
+											<th><span class="kcIcon fuel"></span></th>
+											<th><span class="kcIcon ammo"></span></th>
+											<th><span class="kcIcon steel"></span></th>
+											<th><span class="kcIcon bauxite"></span></th>
+											<th><span class="kcIcon material"></span></th>
+											<th>Success</th>
+											<th>Attempts</th>
+											<th>Rate</th>
+										</tr>
+									</thead>
+									<tbody>
+									
+									</tbody>
+								</table>
+								<table class="table table-responsive construction-table" style="display: none;" id="lsc">
 									<thead>
 										<tr>
 											<th><span class="kcIcon fuel"></span></th>
@@ -145,7 +179,7 @@ if($rs){
 								</table>
 							</div>
 							<div id="drop" class="tab-pane" role="tabpanel">
-								<table class="table table-responsive drop-table table-striped" style="display: none;">
+								<table class="table table-responsive drop-table" style="display: none;">
 									<thead>
 										<tr>
 											<th>Location</th>

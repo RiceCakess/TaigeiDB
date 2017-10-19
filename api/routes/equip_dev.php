@@ -1,65 +1,57 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require '../util/data_db.php';
+header('Content-Type: application/json');
+require '../util/config.php';
 require '../util/functions.php';
-
-if(isset($_SERVER['PATH_INFO'])){
-	$request = trim($_SERVER['PATH_INFO'],'/');
-	if($request==="flagship")
-		require 'equip_dev_flagship.php';
-	else
-		http_response_code(400);
-	
-	return;
-}
+$conn = new mysqli($DBServer, $DBUser, $DBPass, $dataDB);
 
 $equipid = 0;
-$sort = "most";
-$limit = 5;		
-$response = array();
+$limit = $conn->real_escape_string(getLimit(5,20));
+$result = array();
+$lsc = false;
+$msc = microtime(true);
 
-if(isset($_GET['equipid']))
-	$equipid = $conn->real_escape_string($_GET["equipid"]);
-else{
-	http_response_code(400);
-	return;
-}
+if(isset($_GET['id']) && is_numeric($_GET['id']))
+	$equipid = $conn->real_escape_string($_GET["id"]);
+else
+	error(400,"Invalid Equip ID");
 
-if(isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] <=10)
-	$limit = $conn->real_escape_string($_GET["limit"]);
-
-if(isset($_GET['sort']) && $_GET['sort'] === "best"){
-	$sort = $_GET['sort'];
-}
-$sql = "SELECT *, COUNT(uid) totalCount 
-		FROM db_equip_dev 
-		WHERE result = $equipid 
-		GROUP BY fuel,ammo,steel,bauxite 
-		ORDER BY COUNT(*) DESC 
+$sql = "SELECT fuel,ammo,steel,bauxite, COUNT(*) AS `totalCount`,
+		(SELECT COUNT(*) 
+			FROM db_equip_dev T2 
+			WHERE T2.fuel=T1.fuel 
+			AND T2.ammo=T1.ammo 
+			AND T2.steel=T1.steel 
+			AND T2.bauxite=T1.bauxite) AS attempts 
+		FROM db_equip_dev T1 
+		WHERE result=$equipid 
+		GROUP BY fuel,ammo,steel,bauxite
+		ORDER BY attempts DESC
 		LIMIT $limit";
-
 $rs = $conn->query($sql);
+if(!$rs) error(500, "Database Error");
 while($row = $rs->fetch_assoc()){
 	$f = $row['fuel'];
 	$a = $row['ammo'];
 	$s = $row['steel'];
 	$b = $row['bauxite'];
-	$totalSql = "SELECT Count(uid) attempts FROM db_equip_dev WHERE fuel=$f AND ammo=$a AND steel=$s AND bauxite=$b";
-	$totalRs = $conn->query($totalSql);
-	$attempts = $totalRs->fetch_assoc()["attempts"];
+	$attempts = $row["attempts"];
 	$obj = [
 		"fuel" => $f,
 		"ammo" => $a,
 		"steel" => $s,
 		"bauxite" => $b,
 		"count" => $row['totalCount'],
-		"attempts" => $attempts,
-		"percent" => $row['totalCount']/$attempts
+		"attempts" => $attempts
 	];
-	$response[] = $obj;
+	$result[] = $obj;
 }
-echo json_encode($response);
+$msc = microtime(true)-$msc;
+$response = array(
+				"id"=>$equipid,
+				"queryTime"=> round($msc,3),
+				"numResults"=>count($result),
+				"data"=>$result
+			);
+echo json_encode($response, JSON_PRETTY_PRINT);
+http_response_code(200);
 ?>
