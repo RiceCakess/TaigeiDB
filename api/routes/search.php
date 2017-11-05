@@ -1,17 +1,25 @@
 <?php
 require '../util/config.php';
 require '../util/functions.php';
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 $conn = new mysqli($DBServer, $DBUser, $DBPass, $infoDB);
+mysqli_set_charset($conn,"utf8");
 
 $search;
 $limit =  $conn->real_escape_string(getLimit(5,20));
 $category = "all";
 $result = array();
+$baseform = false;
+
 if(isset($_GET['query']) && strlen($_GET['query']) > 0)
-	$search = $conn->real_escape_string($_GET["query"]);
+	$search = strtolower($conn->real_escape_string($_GET["query"]));
 else
 	error(400,"Search query cannot be empty");
+if(isset($_GET['baseform']) && $_GET['baseform'] === "true"){
+	$baseform = true;
+}
+$k2alias = array("k2", "k 2");
+$search = str_replace($k2alias,"kai ni",$search);
 
 if(isset($_GET['category'])){
 	if($_GET['category'] === "ship" || $_GET['category'] === "equip")
@@ -26,6 +34,15 @@ if($category === "ship" || $category == "all"){
 				ON main.type=sub.id
 			WHERE `prev` = 0 AND (main.en_us LIKE '$search%' OR main.en_us LIKE '% $search%') 
 			ORDER BY CHAR_LENGTH(main.en_us) ASC LIMIT $limit";
+	if(!$baseform){
+		$sql = "SELECT TRIM(CONCAT(shp.en_us,' ',sfx.en_us)) as en_us, shp.id, shp.asset, sub.alias as type FROM `ships` shp
+		INNER JOIN suffix sfx ON shp.suffix = sfx.id
+		INNER JOIN shipTypes sub ON shp.type=sub.id
+		WHERE (CONCAT(shp.en_us,' ',sfx.en_us) LIKE '$search%' OR CONCAT(shp.en_us,' ',sfx.en_us) LIKE '% $search%')
+			OR (CONCAT(shp.en_us,' ',sfx.alias) LIKE '$search%' OR CONCAT(shp.en_us,' ',sfx.alias) LIKE '% $search%')
+		ORDER BY CHAR_LENGTH(CONCAT(shp.en_us,' ',sfx.en_us)) ASC LIMIT $limit";
+	}
+	//echo $sql;
 	$rs = $conn->query($sql);
 	if(!$rs) error(500,"Database Error");
 	while($row = $rs->fetch_assoc()){
@@ -54,13 +71,13 @@ if($category === "equip" || $category == "all"){
 	$rs = $conn->query($sql);
 	if(!$rs) error(500,"Database Error");
 	while($row = $rs->fetch_assoc()){
+		
 		$search_obj = [
 			"category" => "equip",
 			"type" => $row["type"],
 			"name" => $row["en_us"],
 			"id" => $row["id"]
 		];
-		
 		$result[] = $search_obj;
 	}
 }

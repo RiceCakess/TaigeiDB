@@ -7,7 +7,7 @@ function searchBar(){
 	if(str.length <= 0)
 		$("#livesearch").html("");
 	else
-		$.get("api/search",{query: str}).done(function(res){
+		$.get("api/search",{query: str, baseform: true}).done(function(res){
 			$("#livesearch").html("");
 			
 			res.data.forEach(function(obj,i){

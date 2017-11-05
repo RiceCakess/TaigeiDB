@@ -7,11 +7,17 @@ if(isset($_GET['request']) && $method === "GET"){
 		case "search":
 			require $routeDir . "search.php";
 			break;
+		case "ships":
+			require $routeDir . "ships.php";
+			break;
 		case "ship_drop": 
 			require $routeDir . "ship_drop.php"; 
 			break;
 		case "ship_drop/location": 
 			require $routeDir . "ship_drop_location.php"; 
+			break;
+		case "ship_drop/node": 
+			require $routeDir . "ship_drop_location_node.php"; 
 			break;
 		case "ship_dev": 
 			require $routeDir . "ship_dev.php"; 

@@ -37,10 +37,10 @@ while($row = $rs->fetch_assoc()){
 
 $msc = microtime(true)-$msc;
 $response = array(
-				"id"=>$equipid,
-				"queryTime"=> round($msc,3),
-				"numResults"=>count($result),
-				"data"=>$result
-			);
+	"id"=>$equipid,
+	"queryTime"=> round($msc,3),
+	"numResults"=>count($result),
+	"data"=>$result
+);
 echo json_encode($response, JSON_PRETTY_PRINT);
 ?>

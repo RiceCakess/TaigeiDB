@@ -3,7 +3,7 @@
 	width: 500px;
 	border-radius: 0;
 	position: absolute;
-	top: 40%;
+	top: 35%;
 	left: 50%;
 	margin-left: -250px;
 	margin-top: -1.5rem;
@@ -21,14 +21,14 @@
 	background-position: right center;
 	cursor: pointer;
 }
-.list-group-item.equip{
+.search-dropdown > .list-group-item.equip{
 	background-size: 160px auto;
 }
-.list-group-item.ship{
+.search-dropdown > .list-group-item.ship{
 	background-position: right -98px center;
 	background-size: auto 47px;
 }
-.list-group-item.category{
+.search-dropdown > .list-group-item.category{
 	background-size: 47px 47px;
 }
 

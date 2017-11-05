@@ -10,24 +10,28 @@ if(isset($_GET['id']) && is_numeric($_GET['id']))
 	$shipid = $conn->real_escape_string($_GET["id"]);
 else
 	error(400,"Invalid Ship ID");
-$sql = "SELECT  main.world, main.map, main.node, main.maprank, sub.count, info.letter,
-COUNT(*) AS totalCount , 
-COUNT(CASE WHEN rank = 'S' THEN 1 END) AS Scount , 
-COUNT(CASE WHEN rank = 'A' THEN 1 END) AS Acount , 
-COUNT(CASE WHEN rank = 'B' THEN 1 END) AS Bcount 
-FROM (SELECT * FROM kancolle.db_ship_drop WHERE (world <= 6 || world = $current_event)AND result = $shipid) main
-INNER JOIN kancolle.db_node_counts sub 
-	ON main.world=sub.world 
-	AND main.map=sub.map 
-	AND main.node=sub.node 
-	AND  (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
-INNER JOIN kancolledb.nodes info
-	ON main.world=info.world 
-	AND main.map=info.map 
-	AND main.node=info.id 
-GROUP BY main.world, main.map, main.node, (CASE WHEN main.world > 6 THEN main.maprank END)
-ORDER BY totalCount DESC, main.world ASC, main.map ASC, main.node ASC
+$sql = "SELECT world, map, maprank, letter AS node, SUM(Scount) AS Scount, SUM(Acount) AS Acount, SUM(Bcount) AS Bcount, SUM(success) AS success, SUM(count) AS count 
+	FROM (SELECT main.world, main.map, main.node, main.maprank, sub.count, info.letter,
+	COUNT(*) AS success, 
+	COUNT(CASE WHEN rank = 'S' THEN 1 END) AS Scount , 
+	COUNT(CASE WHEN rank = 'A' THEN 1 END) AS Acount , 
+	COUNT(CASE WHEN rank = 'B' THEN 1 END) AS Bcount 
+	FROM (SELECT * FROM kancolle.db_ship_drop WHERE (world <= 6 || world = $current_event)AND result = $shipid) main
+	INNER JOIN kancolle.db_node_counts sub 
+		ON main.world=sub.world 
+		AND main.map=sub.map 
+		AND main.node=sub.node 
+		AND  (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
+	INNER JOIN kancolledb.nodes info
+		ON main.world=info.world 
+		AND main.map=info.map 
+		AND main.node=info.id 
+	GROUP BY main.world, main.map, main.node, (CASE WHEN main.world > 6 THEN main.maprank END)
+	ORDER BY success DESC, main.world ASC, main.map ASC, main.node ASC) merge 
+GROUP BY world, map, letter, (CASE WHEN world > 6 THEN maprank END)
+ORDER BY success DESC
 LIMIT $limit";
+//echo $sql;
 $msc = microtime(true);
 $rs = $conn->query($sql);
 if(!$rs) error(500, "Database Error");
@@ -38,15 +42,15 @@ while($row = $rs->fetch_assoc()){
 	$obj = [
 			"world" => $row['world'],
 			"map" => $row['map'],
-			"node" => $row['letter'],
+			"node" => $row['node'],
 			"maprank" => $row['maprank'],
 			"Srank" => $row['Scount'],
 			"Arank" => $row['Acount'],
 			"Brank" => $row['Bcount'],
-			"count" => $row['totalCount'],
+			"success" => $row['success'],
 			"attempts" => $row['count']
 		];
-	$result[] = $obj;
+		$result[] = $obj;
 }
 $response = array(
 				"id"=>$shipid,
