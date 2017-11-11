@@ -39,6 +39,7 @@ $json = json_encode($arr);
 				
 				$("#" + obj.typeShort + " > .card-block > ul").append("<a href='ship.php?id=" + obj.id + "'><li>" + createShipBanner(obj.asset, obj.name)[0].outerHTML +"</li></a>");
 			});
+			addCollapse();
 		});
 		</script>
 	</head>
@@ -48,7 +49,6 @@ $json = json_encode($arr);
 			<div class="container full-page">
 				<div class="row">
 					<div class="page-header">Construction</div>
-					<hr/>
 					
 					<ul class="nav nav-pills type-nav">
 					</ul>

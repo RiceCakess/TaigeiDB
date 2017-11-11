@@ -33,11 +33,28 @@ $buildtime = $row['buildtime'];
 		$(document).ready(function(){
 			var anchor = window.location.hash;
 			var dropBuilt = false;
-			fetchConstructionData();
+			var constrBuilt = false;
+			var hash = window.location.hash.substr(1).toLowerCase();
+			
+			if(hash === "drop"){
+				fetchDropTable();
+				$("a[href='#drop']").tab('show');
+			}
+			else{
+				fetchConstructionData();
+				constrBuilt = true;
+			}
+			
 			$("a[href='#drop']").click(function(){
 				if(!dropBuilt){
 					fetchDropTable();
 					dropBuilt = true;
+				}
+			});
+			$("a[href='#construction']").click(function(){
+				if(!constrBuilt){
+					fetchConstructionData();
+					constrBuilt = true;
 				}
 			});
 		});
@@ -140,7 +157,7 @@ $buildtime = $row['buildtime'];
 					//console.log(obj);
 					percent = (obj.success/obj.attempts) *100;
 					var row = $("<tr/>")
-						.append("<td>" + obj.world + "-" + obj.map + difficulty[obj.maprank] + " " + obj.node + "</td>")
+						.append("<td><a href='drop.php?world=" + obj.world + "&map=" + obj.map + "#" + obj.node + "'>" + obj.world + "-" + obj.map + difficulty[obj.maprank] + " " + obj.node + "</a></td>")
 						.append("<td>" + obj.Srank + "</td>")
 						.append("<td>" + obj.Arank + "</td>")
 						.append("<td>" + obj.Brank + "</td>")
@@ -179,17 +196,18 @@ $buildtime = $row['buildtime'];
 						</center>
 					</div>
 					<div class="col-lg-9 data-col">
-						<ul class="nav nav-tabs ship-data-nav" role="tablist">
+						<ul class="nav nav-tabs tabs-nav" role="tablist">
 							<li class="nav-item">
 								<a class="nav-link active" data-toggle="tab" href="#construction">Construction</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#drop">Drop</a>
+								<a class="nav-link" data-toggle="tab" href="#drop" id="#drop">Drop</a>
 							</li>
 						</ul>
 						<div class="tab-content">
 							<div id="construction" class="tab-pane active" role="tabpanel">
-								<div class="card data-card hidden" id="dev">
+							  
+								<div class="card data-card hidden card-collapse" id="dev">
 									<div class="card-header">
 										Construction
 									</div>
@@ -211,7 +229,7 @@ $buildtime = $row['buildtime'];
 										</table>
 									</div>
 								</div>
-								<div class="card data-card hidden" id="lsc">
+								<div class="card data-card hidden card-collapse" id="lsc">
 									<div class="card-header">
 										Large Scale Construction
 									</div>
@@ -235,7 +253,7 @@ $buildtime = $row['buildtime'];
 										</table>
 									</div>
 								</div>
-								<div class="card data-card hidden" id="flagship">
+								<div class="card data-card hidden card-collapse" id="flagship">
 									<div class="card-header">
 										Frequent Flagship
 									</div>
@@ -254,7 +272,7 @@ $buildtime = $row['buildtime'];
 								</div>
 							</div>
 							<div id="drop" class="tab-pane" role="tabpanel">
-								<div class="card data-card hidden" id="drop">
+								<div class="card data-card hidden card-collapse" id="drop">
 									<div class="card-header">
 										Drops
 									</div>

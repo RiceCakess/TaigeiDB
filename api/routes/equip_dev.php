@@ -17,12 +17,12 @@ else
 
 $sql = "SELECT fuel,ammo,steel,bauxite, COUNT(*) AS `totalCount`,
 		(SELECT COUNT(*) 
-			FROM db_equip_dev T2 
+			FROM db_equip_build T2 
 			WHERE T2.fuel=T1.fuel 
 			AND T2.ammo=T1.ammo 
 			AND T2.steel=T1.steel 
 			AND T2.bauxite=T1.bauxite) AS attempts 
-		FROM db_equip_dev T1 
+		FROM db_equip_build T1 
 		WHERE result=$equipid 
 		GROUP BY fuel,ammo,steel,bauxite
 		ORDER BY attempts DESC

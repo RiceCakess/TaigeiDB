@@ -37,13 +37,13 @@ if($lsc){
 }
 $sql = "SELECT fuel,ammo,steel,bauxite,material,COUNT(*) AS `totalCount`,
 		(SELECT COUNT(*) 
-			FROM db_ship_dev T2 
+			FROM db_ship_build T2 
 			WHERE T2.fuel=T1.fuel 
 			AND T2.ammo=T1.ammo 
 			AND T2.steel=T1.steel 
 			AND T2.bauxite=T1.bauxite 
 			AND T2.material=T1.material) AS attempts 
-		FROM db_ship_dev T1 
+		FROM db_ship_build T1 
 		WHERE result=$shipid "
 		. $where .
 		" GROUP BY fuel,ammo,steel,bauxite,material

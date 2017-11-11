@@ -1,15 +1,16 @@
 function searchBar(){
-	$(".main-search > input").keyup(function(e){
+	$(".search-bar > input").keyup(function(e){
 	if(e.which == 40 || e.which == 38 || e.which == 13){
 		return;
 	}
-	var str = $("#livesearch").prev("input").val();
+	var str = $(this).val();
+	var livesearch = $(this).next("#livesearch");
 	if(str.length <= 0)
-		$("#livesearch").html("");
+		livesearch.html("");
 	else
 		$.get("api/search",{query: str, baseform: true}).done(function(res){
-			$("#livesearch").html("");
-			
+			livesearch.html("");
+
 			res.data.forEach(function(obj,i){
 				var img = "";
 				switch(obj.category){
@@ -31,11 +32,12 @@ function searchBar(){
 								.addClass(obj.category)
 								.css("background-image", "url(" + img + ")")
 								.attr("data-link",obj.category + ".php?id=" + obj["id"]);
-				$("#livesearch").append(listItem);
+				livesearch.append(listItem);
+				//console.log(listItem);
 			
 			});
 			$("#livesearch > li").hover(function(){
-				var current = $("#livesearch").children(".active");
+				var current = livesearch.children(".active");
 				$(current).removeClass("active");
 				$(this).addClass("active");
 			}).click(function(){
@@ -43,24 +45,19 @@ function searchBar(){
 			});
 		});
 	}).keydown(function (e){
-		if (e.which == 13) {
-			var current = $("#livesearch").children(".active");
+		var current = $(livesearch).children(".active");
+		if (e.which == 13 && current.attr("data-link")) {
 			window.location.href = current.attr("data-link");
+			return;
 		}
-		if(e.which == 40){
-			var current = $("#livesearch").children(".active");
-			if(current.next().length > 0){
-				$(current).next().addClass("active");
-				$(current).removeClass("active");
-			}
+		if(e.which == 40 && current.next().length > 0){
+			$(current).next().addClass("active");
+			$(current).removeClass("active");
 			e.preventDefault();
 		}
-		if(e.which == 38){
-			var current = $("#livesearch").children(".active");
-			if(current.prev().length > 0){
-				$(current).prev().addClass("active");
-				$(current).removeClass("active");
-			}
+		if(e.which == 38 && current.prev().length > 0){
+			$(current).prev().addClass("active");
+			$(current).removeClass("active");
 			e.preventDefault();
 		}
 	});

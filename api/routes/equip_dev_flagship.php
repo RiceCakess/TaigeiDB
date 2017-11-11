@@ -17,7 +17,7 @@ else
 	error(400,"Invalid Ship ID");
 
 $sql = "SELECT flagship, COUNT(uid) totalCount 
-		FROM db_equip_dev 
+		FROM db_equip_build 
 		WHERE result=$equipid 
 		GROUP BY flagship
 		ORDER BY COUNT(*) DESC 

@@ -41,7 +41,7 @@ $sql = "SELECT world, map, maprank, letter, SUM(Scount) AS Scount, SUM(Acount) A
 				GROUP BY node, result, (CASE WHEN main.world > 6 THEN main.maprank END)
 				ORDER BY node ASC, result ASC) merge 
 	GROUP BY world, map, letter, (CASE WHEN world > 6 THEN maprank END), result
-	ORDER BY result ASC";
+	ORDER BY letter ASC, success DESC";
 
 $nodesql = "SELECT *, SUM(count) as count FROM kancolle.db_node_counts main 
 			INNER JOIN kancolledb.nodes sub ON main.world=sub.world AND main.map=sub.map AND main.node=sub.id
@@ -64,10 +64,7 @@ while($row = $rs->fetch_assoc()){
 	$letter = $row['letter'];
 	$count = $nodes[$row['world'] . "-" . $row['map'] . "-" . $letter];
 	if(!array_key_exists($letter,$result)){
-		$result[] = array(
-			"attempts" => $count,
-			"drops" => array()
-		);
+		$result[$letter]["attempts"] = $count;
 	}
 	$obj = [
 		"result"=>$row["result"],

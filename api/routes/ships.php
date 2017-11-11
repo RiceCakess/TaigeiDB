@@ -26,7 +26,6 @@ $row = $rs->fetch_assoc();
 $response = [
 		"id"=>$id,
 		"no"=>$row["no"],
-		
 		"ja_jp" => $row["ja_jp"],
 		"en_us" => $row["en_us"],
 		"type" => $row["type"],
@@ -35,7 +34,8 @@ $response = [
 		"rare" => $row["rare"],
 		"next" => $row["next"],
 		"prev" => $row["prev"],
-		"asset" => $row['asset']
+		"asset" => $row['asset'],
+		"exclusive" => $row['exclusive']
 	];
 http_response_code(200);
 echo json_encode($response, JSON_PRETTY_PRINT);

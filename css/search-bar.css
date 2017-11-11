@@ -12,6 +12,20 @@
 	border-radius: 0;
 	background-clip: border-box;
 }
+.sub-search{
+	position: relative;
+}
+.sub-search > input{
+	width: 350px;
+}
+.sub-search > .search-dropdown{
+	max-width: 350px;
+}
+.search-dropdown{
+	position: absolute;
+	width: 100%;
+	z-index: 3;
+}
 .search-dropdown > .list-group-item{ 
 	border-radius: 0;
 	padding: .5rem 1rem;
@@ -31,7 +45,6 @@
 .search-dropdown > .list-group-item.category{
 	background-size: 47px 47px;
 }
-
 .search-dropdown > .active{
 	background-color: #6286FF;
 	border-color: #6286FF;
@@ -39,10 +52,14 @@
 .search-dropdown > .list-group-item:first-child{
 	border-top: none;
 }
-@media only screen and (max-device-width : 500px) {
+@media (max-width: 500px) {
 	.main-search{
 		width: 90%;
 		margin-left: 5%;
 		left: 0;
+	}
+	.sub-search > input{
+		width: 100%;
+		margin-top: 10px;
 	}
 }

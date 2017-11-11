@@ -33,7 +33,7 @@ $craftable = $row['craftable'];
 				return;
 			}
 			var fairy = addLoadingFairy("#development");
-			$.get("api/equip_dev",{id: <?php echo $id ?>, limit:5}).done(function(res) {
+			$.get("api/equip_dev",{id: <?php echo $id ?>, limit:8}).done(function(res) {
 				var devcard = $(".data-card#dev");
 				var tableBody = devcard.find("tbody");
 				if(res.data.length == 0){
