@@ -10,8 +10,9 @@ if(isset($_GET["id"])){
 $sql = "SELECT * FROM equips WHERE id=" . $conn->real_escape_string($id);
 $rs = $conn->query($sql);
 $no = $asset = $name = $type = $suffix = $wiki = 0;
-if(!$rs){
+if(!$rs || $rs->num_rows <= 0){
 	http_response_code(404);
+	include('404.php'); 
 	return;
 }
 $row = $rs->fetch_assoc();
@@ -22,6 +23,7 @@ $craftable = $row['craftable'];
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
+		<title><?php echo $name; ?>  Development</title>
 		<script>
 		$(document).ready(function(){
 			fetchConstructionData();

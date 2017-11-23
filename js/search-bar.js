@@ -33,8 +33,6 @@ function searchBar(){
 								.css("background-image", "url(" + img + ")")
 								.attr("data-link",obj.category + ".php?id=" + obj["id"]);
 				livesearch.append(listItem);
-				//console.log(listItem);
-			
 			});
 			$("#livesearch > li").hover(function(){
 				var current = livesearch.children(".active");

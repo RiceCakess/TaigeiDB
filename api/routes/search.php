@@ -89,7 +89,7 @@ $response = array(
 				"data"=>$result
 			);
 http_response_code(200);
-echo json_encode($response, JSON_PRETTY_PRINT);
+echo json_encode($response, JSON_PRETTY_PRINT, JSON_UNESCAPED_UNICODE);
 ?>
 
 

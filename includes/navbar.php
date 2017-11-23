@@ -9,6 +9,9 @@
 			else{
 				$(".sub-search").show();
 			}
+			if(page === "droplist" || page === "worlds")
+				$('.navbar-nav > li > a#dropdown').parent().addClass('active');
+			
 			$('.navbar-nav > li > a[href="'+ page +'"]').parent().addClass('active');
 			searchBar();
 		});
@@ -18,8 +21,8 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<a class="navbar-brand" href="./">
-			<!-- <img src="assets/whale.svg" width="100px"> !-->
-			Taigei
+			<img src="assets/icon/icon_48.png" width="38px">
+			Taigei DB
 		</a>
 		
 		<div class="collapse navbar-collapse" id="navbarToggler">
@@ -29,16 +32,19 @@
 					<a class="nav-link" href="./">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="construction.php">Construction</a>
+					<a class="nav-link" href="construction">Construction</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="development.php">Development</a>
+					<a class="nav-link" href="development">Development</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="drops.php">Drops</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Discord Bot</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Drop
+					</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown">
+					  <a class="dropdown-item" href="droplist">Drop List</a>
+					  <a class="dropdown-item" href="worlds">Worlds</a>
+					</div>
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto" >

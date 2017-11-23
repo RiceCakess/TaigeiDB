@@ -24,6 +24,7 @@ $json = json_encode($arr);
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
+		<title>Tagei - Development List</title>
 		<script>
 		$(document).ready(function(){
 			$json = <?php echo $json; ?>;
@@ -37,11 +38,11 @@ $json = json_encode($arr);
 					var iconName = obj.iconName.toLowerCase();
 					iconName = iconName.split(" ").join("_").split("-").join("_");
 					
-					$(".type-nav").append('<li class="nav-item"><a class="nav-link" href="#'+ obj.icon + '"><img src="'+ assetPath + "icons/plain/" + iconName +'.png"></a></li>');
+					$(".nav-pills").append('<li class="nav-item"><a class="nav-link" href="#'+ obj.icon + '"><img src="'+ assetPath + "icons/plain/" + iconName +'.png"></a></li>');
 
 				}
 				
-				$("#" + obj.icon + " > .card-block > ul").append("<a href='equip.php?id=" + obj.id + "'><li>" + createEquipBanner(obj.id,obj.name)[0].outerHTML + "</li></a>");
+				$("#" + obj.icon + " > .card-block > ul").append("<a href='equip?id=" + obj.id + "'><li>" + createEquipBanner(obj.id,obj.name)[0].outerHTML + "</li></a>");
 			});
 			addCollapse();
 		});
@@ -53,7 +54,7 @@ $json = json_encode($arr);
 			<div class="container full-page">
 				<div class="row">	
 					<div class="page-header">Development</div>
-					<ul class="nav nav-pills type-nav" id="equip">
+					<ul class="nav nav-pills" id="equip">
 					</ul>
 				</div>
 			</div>

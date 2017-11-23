@@ -2,3 +2,11 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule api/(.*)$ api/index.php?request=$1 [QSA,NC,L]
+
+
+ErrorDocument 404 https://dchen.xyz/p/kancolle/404
+
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]

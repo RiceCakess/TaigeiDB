@@ -3,8 +3,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once('../util/config.php');
-$conn = new mysqli($DBServer, $DBUser, $DBPass, $dataDB);
-/*$sql = "SELECT world,map,node,maprank, count(*) as count FROM db_ship_drop GROUP BY world, map, node, (CASE WHEN `world` > 6 THEN `maprank` END)";
+/*$conn = new mysqli($DBServer, $DBUser, $DBPass, $dataDB);
+$now = new DateTime('tomorrow');
+$today = $now->format('Y-m-d') . " 00:00:00";
+$yearAgo = date_sub($now, new DateInterval("P1Y"))->format('Y-m-d') . " 00:00:00";
+$sql = "SELECT world,map,node,maprank, count(*) as count FROM db_ship_drop WHERE (regis BETWEEN '$yearAgo' AND '$today') GROUP BY world, map, node, (CASE WHEN `world` > 6 THEN `maprank` END)";
 $rs = $conn->query($sql);
 
 while($row = $rs->fetch_assoc()){
@@ -21,8 +24,8 @@ while($row = $rs->fetch_assoc()){
 	}
 	echo $insert;
 	$conn->query($insert);
-}*/
-
+}
+*/
 //$sql = "UPDATE kancolledb.ships SET craftable=1 WHERE id = ANY (SELECT DISTINCT result FROM kancolle.db_ship_dev)"
 
 ?>

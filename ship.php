@@ -8,14 +8,16 @@ if(isset($_GET["id"]) && is_numeric($_GET["id"])){
 }
 else{
 	http_response_code(404);
+	include('404.php'); 
 	return;
 }
 
 $sql = "SELECT * FROM ships WHERE id=" . $conn->real_escape_string($id);
 $rs = $conn->query($sql);
 $no = $asset = $name = $type = $suffix = $wiki = 0;
-if(!$rs){
+if(!$rs || $rs->num_rows <= 0){
 	http_response_code(404);
+	include('404.php'); 
 	return;
 }
 $row = $rs->fetch_assoc();
@@ -29,8 +31,163 @@ $buildtime = $row['buildtime'];
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
+		<title><?php echo $name ?> Construction/Drop</title>
+	
+	</head>
+	<body>
+		
+		<div class="content">
+			<?php require_once ('includes/navbar.php');?>
+			<div class="container full-page">
+				<!--<img class="ship-bg" src="<?php echo $assetPath . "ships/" . $asset . "/17.png" ?>"/>!-->
+				<div class="ship-no">No. <?php echo $no ?></div>
+				<div class="row">	
+					<div class="col-lg-3 info-col">
+						<center>
+							<div class="card ship-card">
+								<img class="card-img-top" src="<?php echo $assetPath . "ships/" . $asset . "/5.png" ?>">
+								<div class="card-footer">
+									<?php echo $name; ?>
+									<br>
+									<a href="<?php echo $wiki; ?>">Wiki</a>
+								</div>
+							</div>
+						</center>
+					</div>
+					<div class="col-lg-9 data-col">
+						<ul class="nav nav-tabs tabs-nav" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#construction">Construction</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#drop" id="#drop">Drop</a>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<div id="construction" class="tab-pane active" role="tabpanel">
+							  
+								<div class="card data-card hidden card-collapse" id="dev">
+									<div class="card-header">
+										Construction
+									</div>
+									<div class="card-block">
+										<table class="table construction-table">
+											<thead>
+												<tr>
+													<th><span class="kcIcon fuel" title="Fuel"></span></th>
+													<th><span class="kcIcon ammo" title="Ammo"></span></th>
+													<th><span class="kcIcon steel" title="Steel"></span></th>
+													<th><span class="kcIcon bauxite" title="Bauxite"></span></th>
+													<th><span class="kcIcon material" title="Material"></span></th>
+													<th title="Number of successes">Success</th>
+													<th title="Number of attempts">Attempts</th>
+													<th title="Percent">%</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+								<div class="card data-card hidden card-collapse" id="lsc">
+									<div class="card-header">
+										Large Scale Construction
+									</div>
+									<div class="card-block">
+										<table class="table construction-table">
+											<thead>
+												<tr>
+													<th><span class="kcIcon fuel" title="Fuel"></span></th>
+													<th><span class="kcIcon ammo" title="Ammo"></span></th>
+													<th><span class="kcIcon steel" title="Steel"></span></th>
+													<th><span class="kcIcon bauxite" title="Bauxite"></span></th>
+													<th><span class="kcIcon material" title="Material"></span></th>
+													<th title="Number of successes">Success</th>
+													<th title="Number of attempts">Attempts</th>
+													<th title="Percent">%</th>
+												</tr>
+											</thead>
+											<tbody>
+											
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="card data-card hidden card-collapse" id="flagship">
+									<div class="card-header">
+										Frequent Flagship
+									</div>
+									<div class="card-block">
+										<table class="table construction-table">
+											<thead>
+												<tr>
+													<th>Ship</th>
+													<th>Type</th>
+													<th># times used</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div id="drop" class="tab-pane" role="tabpanel">
+							<div class="card data-card hidden card-collapse" id="eventdrop">
+									<div class="card-header">
+										Current Event Drop
+									</div>
+									<div class="card-block">
+										<table class="table drop-table">
+											<thead>
+												<tr>
+													<th>Location</th>
+													<th><span class="kcIcon Srank"></span></th>
+													<th><span class="kcIcon Arank"></span></th>
+													<th><span class="kcIcon Brank"></span></th>
+													<th>Attempts</th>
+													<th>Rate</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+								<div class="card data-card hidden card-collapse" id="drop">
+									<div class="card-header">
+										Drops
+									</div>
+									<div class="card-block">
+										<table class="table drop-table">
+											<thead>
+												<tr>
+													<th>Location</th>
+													<th><span class="kcIcon Srank"></span></th>
+													<th><span class="kcIcon Arank"></span></th>
+													<th><span class="kcIcon Brank"></span></th>
+													<th>Attempts</th>
+													<th>Rate</th>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<script>
+		var current_event = <?php echo $current_event; ?>;
+
 		$(document).ready(function(){
+			//prevent anchor jump to middle of page
+			if (location.hash) {
+			  setTimeout(function() {
+				window.scrollTo(0, 0);
+			  }, 1);
+			}
 			var anchor = window.location.hash;
 			var dropBuilt = false;
 			var constrBuilt = false;
@@ -39,6 +196,7 @@ $buildtime = $row['buildtime'];
 			if(hash === "drop"){
 				fetchDropTable();
 				$("a[href='#drop']").tab('show');
+				dropBuilt = true;
 			}
 			else{
 				fetchConstructionData();
@@ -144,160 +302,51 @@ $buildtime = $row['buildtime'];
 			$.get("api/ship_drop",{id: <?php echo $id ?>}).done(function(res){
 				$(fairy).remove();
 				var devcard = $(".data-card#drop");
+				var eventcard = $(".data-card#eventdrop");
 				var tableBody = devcard.find("tbody");
-				
+				var eventBody = eventcard.find("tbody");
 				//count results not filtered
-				var resCount = 0;
+				var resCount = [0,0];
+				console.log(res);
 				res.data.forEach(function(obj){
-					//if normal map has less than 10 reports, then ignore
-					if(obj.count < 10 && obj.map <=6){
+					//if normal map has less than 10 reports, then ignore or event map doesn't have difficulty
+					if(obj.count < 10 && obj.world <=6 || (obj.maprank == 0 && obj.world > 6)){
 						return;
 					}
-					resCount++;
 					//console.log(obj);
 					percent = (obj.success/obj.attempts) *100;
 					var row = $("<tr/>")
-						.append("<td><a href='drop.php?world=" + obj.world + "&map=" + obj.map + "#" + obj.node + "'>" + obj.world + "-" + obj.map + difficulty[obj.maprank] + " " + obj.node + "</a></td>")
+						.append("<td><a href='drop?world=" 
+						+ obj.world + "&map=" + obj.map + ((obj.world == current_event) ? "&maprank=" + obj.maprank : "" )+ "#" + obj.node + "'>" 
+						+ ((obj.world == current_event) ? ("E-" + obj.map) : (obj.world + "-" + obj.map)) 
+						+ difficulty[obj.maprank] + " " + obj.node + "</a></td>")
 						.append("<td>" + obj.Srank + "</td>")
 						.append("<td>" + obj.Arank + "</td>")
 						.append("<td>" + obj.Brank + "</td>")
 						.append("<td>" + obj.attempts + "</td>")
 						.append("<td>" + round(percent,4) +"%" + "</td>");
-					tableBody.append(row);
+
+					if(obj.world > 6){
+						eventBody.append(row);
+						resCount[1]++;
+					}
+					else{
+						tableBody.append(row);
+						resCount[0]++;
+					}
 				});
-				if(resCount == 0){
+				if(resCount[0] + resCount[1] == 0){
 					$("#drop").prepend(
 						createAlert("danger","This ship does not drop!"));
 					return;
 				}
-				devcard.removeClass("hidden");
+				if(resCount[0] > 0)
+					devcard.removeClass("hidden");
+				if(resCount[1] > 0)
+					eventcard.removeClass("hidden");
 			});
 		}
 		</script>
-	</head>
-	<body>
-		
-		<div class="content">
-			<?php require_once ('includes/navbar.php');?>
-			<div class="container full-page">
-				<!--<img class="ship-bg" src="<?php echo $assetPath . "ships/" . $asset . "/17.png" ?>"/>!-->
-				<div class="ship-no">No. <?php echo $no ?></div>
-				<div class="row">	
-					<div class="col-lg-3 info-col">
-						<center>
-							<div class="card ship-card">
-								<img class="card-img-top" src="<?php echo $assetPath . "ships/" . $asset . "/5.png" ?>">
-								<div class="card-footer">
-									<?php echo $name; ?>
-									<br>
-									<a href="<?php echo $wiki; ?>">Wiki</a>
-								</div>
-							</div>
-						</center>
-					</div>
-					<div class="col-lg-9 data-col">
-						<ul class="nav nav-tabs tabs-nav" role="tablist">
-							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="#construction">Construction</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#drop" id="#drop">Drop</a>
-							</li>
-						</ul>
-						<div class="tab-content">
-							<div id="construction" class="tab-pane active" role="tabpanel">
-							  
-								<div class="card data-card hidden card-collapse" id="dev">
-									<div class="card-header">
-										Construction
-									</div>
-									<div class="card-block">
-										<table class="table construction-table">
-											<thead>
-												<tr>
-													<th><span class="kcIcon fuel" title="Fuel"></span></th>
-													<th><span class="kcIcon ammo" title="Ammo"></span></th>
-													<th><span class="kcIcon steel" title="Steel"></span></th>
-													<th><span class="kcIcon bauxite" title="Bauxite"></span></th>
-													<th><span class="kcIcon material" title="Material"></span></th>
-													<th title="Number of successes">Success</th>
-													<th title="Number of attempts">Attempts</th>
-													<th title="Percent">%</th>
-												</tr>
-											</thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
-								<div class="card data-card hidden card-collapse" id="lsc">
-									<div class="card-header">
-										Large Scale Construction
-									</div>
-									<div class="card-block">
-										<table class="table construction-table">
-											<thead>
-												<tr>
-													<th><span class="kcIcon fuel" title="Fuel"></span></th>
-													<th><span class="kcIcon ammo" title="Ammo"></span></th>
-													<th><span class="kcIcon steel" title="Steel"></span></th>
-													<th><span class="kcIcon bauxite" title="Bauxite"></span></th>
-													<th><span class="kcIcon material" title="Material"></span></th>
-													<th title="Number of successes">Success</th>
-													<th title="Number of attempts">Attempts</th>
-													<th title="Percent">%</th>
-												</tr>
-											</thead>
-											<tbody>
-											
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<div class="card data-card hidden card-collapse" id="flagship">
-									<div class="card-header">
-										Frequent Flagship
-									</div>
-									<div class="card-block">
-										<table class="table construction-table">
-											<thead>
-												<tr>
-													<th>Ship</th>
-													<th>Type</th>
-													<th># times used</th>
-												</tr>
-											</thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							<div id="drop" class="tab-pane" role="tabpanel">
-								<div class="card data-card hidden card-collapse" id="drop">
-									<div class="card-header">
-										Drops
-									</div>
-									<div class="card-block">
-										<table class="table drop-table">
-											<thead>
-												<tr>
-													<th>Location</th>
-													<th><span class="kcIcon Srank"></span></th>
-													<th><span class="kcIcon Arank"></span></th>
-													<th><span class="kcIcon Brank"></span></th>
-													<th>Attempts</th>
-													<th>Rate</th>
-												</tr>
-											</thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<?php include_once ('includes/footer.php'); ?>
 	</body>
 	

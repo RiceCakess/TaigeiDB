@@ -14,7 +14,7 @@ if(isset($_GET['request']) && $method === "GET"){
 			require $routeDir . "ship_drop.php"; 
 			break;
 		case "ship_drop/location": 
-			require $routeDir . "ship_drop_location.php"; 
+			require $routeDir . "ship_drop_location3.php"; 
 			break;
 		case "ship_drop/node": 
 			require $routeDir . "ship_drop_location_node.php"; 

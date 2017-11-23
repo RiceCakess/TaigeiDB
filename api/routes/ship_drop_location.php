@@ -18,7 +18,7 @@ else
 	error(400,"Invalid world or map");
 
 if(isset($_GET['maprank']) && $world > 6){
-	if(!is_numeric($_GET['maprank']) || $_GET['maprank'] > 3) error(400,"Invalid maprank!");
+	if(!is_numeric($_GET['maprank']) || $_GET['maprank'] > 3 || $_GET['maprank'] < 0 ) error(400,"Invalid maprank!");
 	$maprank = $conn->real_escape_string($_GET["maprank"]);
 }
 $sql = "SELECT world, map, maprank, letter, SUM(Scount) AS Scount, SUM(Acount) AS Acount, SUM(Bcount) AS Bcount, SUM(success) AS success, result FROM
@@ -27,26 +27,29 @@ $sql = "SELECT world, map, maprank, letter, SUM(Scount) AS Scount, SUM(Acount) A
 				COUNT(CASE WHEN rank = 'S' THEN 1 END) AS Scount, 
 				COUNT(CASE WHEN rank = 'A' THEN 1 END) AS Acount, 
 				COUNT(CASE WHEN rank = 'B' THEN 1 END) AS Bcount 
-				FROM (SELECT * FROM kancolle.db_ship_drop 
-				WHERE world=$world AND map=$map AND (CASE WHEN  world > 6 THEN maprank=0 ELSE 1 END)) main
-			INNER JOIN kancolle.db_node_counts sub 
+				FROM (SELECT * FROM opendb.db_ship_drop 
+				WHERE (regis BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()) AND world=$world AND map=$map AND (CASE WHEN  world > 6 THEN maprank=$maprank ELSE 1 END)) main
+			INNER JOIN opendb.db_node_counts sub 
 				ON main.world=sub.world 
 				AND main.map=sub.map 
 				AND main.node=sub.node
-				AND  (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
+				AND (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
 			INNER JOIN kancolledb.nodes info
 				ON main.world=info.world 
 				AND main.map=info.map 
 				AND main.node=info.id 
-				GROUP BY node, result, (CASE WHEN main.world > 6 THEN main.maprank END)
-				ORDER BY node ASC, result ASC) merge 
-	GROUP BY world, map, letter, (CASE WHEN world > 6 THEN maprank END), result
+				GROUP BY node, result, (CASE WHEN main.world > 6 THEN main.maprank END)) merge 
+	GROUP BY world, map, letter, result
 	ORDER BY letter ASC, success DESC";
 
-$nodesql = "SELECT *, SUM(count) as count FROM kancolle.db_node_counts main 
-			INNER JOIN kancolledb.nodes sub ON main.world=sub.world AND main.map=sub.map AND main.node=sub.id
-			WHERE main.world=$world AND main.map=$map AND (CASE WHEN  main.world > 6 THEN main.maprank=0 ELSE 1 END) GROUP BY letter";
-//echo $nodesql;	
+$nodesql = "SELECT main.world, main.map, letter, main.count 
+			FROM (SELECT * FROM opendb.db_node_counts 
+					WHERE world=$world AND map=$map AND (CASE WHEN  world > 6 THEN maprank=$maprank ELSE 1 END)) main 
+			INNER JOIN kancolledb.nodes sub 
+			ON main.world=sub.world 
+			AND main.map=sub.map 
+			AND main.node=sub.id";
+echo $sql;	
 $msc = microtime(true);
 $nodes = [];
 

@@ -16,11 +16,11 @@ if(isset($_GET['id']) && is_numeric($_GET['id']))
 else
 	error(400,"Invalid Ship ID");
 
-$sql = "SELECT flagship, COUNT(uid) totalCount 
+$sql = "SELECT flagship, COUNT(uid) totalCount
 		FROM db_equip_build 
 		WHERE result=$equipid 
 		GROUP BY flagship
-		ORDER BY COUNT(*) DESC 
+		ORDER BY totalCount DESC 
 		LIMIT $limit";
 
 $rs = $conn->query($sql);

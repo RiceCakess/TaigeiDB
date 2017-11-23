@@ -8,7 +8,23 @@
 		</ul>
 		<span>Made with love by <a href="">Ricecakes</a></span>
 		<div class="text-muted">Original data kindly provided by OpenDB (Wolfkangkurz)</div>
-		<img class="footer-taigei" src="assets/footer-taigei.png"/>
+		<?php 
+			$month = date('n'); 
+			$src = "";
+			if($month == 12 && $month <= 2){
+				$src = "assets/footer-taigei2.png";
+			}
+			else if($month >= 3 && $month <= 5){
+				$src = "assets/footer-taigei3.png";
+			}
+			else if($month >= 6 && $month <= 8){
+				$src = "assets/footer-taigei.png";
+			}
+			else if($month >= 9 && $month <= 11){
+				$src = "assets/footer-taigei4.png";
+			}
+		?>
+		<img class="footer-taigei" src="<?php echo $src;?>"/>
 		
 	</div>
 	<div class="footer-dot"/>
