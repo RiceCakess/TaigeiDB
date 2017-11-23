@@ -1,0 +1,184 @@
+{
+	"1": {
+		"en_us": "Naval Base Area",
+		"ja_jp": "鎮守府海域",
+		"maps": {
+			"1": {
+				"ja_jp": "鎮守府正面海域",
+				"en_us": "Sea in Front of the Naval Base"
+			},
+			"2": {
+				"ja_jp": "南西諸島沖",
+				"en_us": "Sea around the Nansei Islands"
+			},
+			"3": {
+				"ja_jp": "製油所地帯沿岸",
+				"en_us": "Coastal Refinery Zone"
+			},
+			"4": {
+				"ja_jp": "南西諸島防衛線",
+				"en_us": "Hold the Line at the Nansei Islands"
+			},
+			"5": {
+				"ja_jp": "鎮守府近海",
+				"en_us": "Adjacent Seas of the Naval Base"
+			},
+			"6": {
+				"ja_jp": " 鎮守府近海航路",
+				"en_us": "Naval Base Adjacent Sea Route"
+			}
+		}
+	},
+	"2": {
+		"en_us": "Southwestern Island Area",
+		"ja_jp": "南西諸島海域",
+		"maps": {
+			"1": {
+				"ja_jp": "カムラン半島",
+				"en_us": "Cam Ranh Peninsula"
+			},
+			"2": {
+				"ja_jp": "バシー島沖",
+				"en_us": "Bashi Island"
+			},
+			"3": {
+				"ja_jp": "東部オリョール海",
+				"en_us": "Eastern Orel Bay"
+			},
+			"4": {
+				"ja_jp": "沖ノ島海域",
+				"en_us": "Okinoshima Island"
+			},
+			"5": {
+				"ja_jp": "沖ノ島沖",
+				"en_us": "Okinoshima Sea"
+			}
+		}
+	},
+	"3": {
+		"en_us": "Northern Area",
+		"ja_jp": "北方海域",
+		"maps": {
+			"1": {
+				"ja_jp": "モーレイ海",
+				"en_us": "The Moray Sea"
+			},
+			"2": {
+				"ja_jp": "キス島沖",
+				"en_us": "The Kis Island"
+			},
+			"3": {
+				"ja_jp": "アルフォンシーノ方面",
+				"en_us": "The Alfonsinos"
+			},
+			"4": {
+				"ja_jp": "北方海域全域",
+				"en_us": "Throughout the Northern Sea"
+			},
+			"5": {
+				"ja_jp": "北方AL海域",
+				"en_us": "Northern AL Waters"
+			}
+		}
+	},
+	"4": {
+		"en_us": "Western Area",
+		"ja_jp": "西方海域",
+		"maps": {
+			"1": {
+				"ja_jp": "ジャム島攻略作戦",
+				"en_us": "Battle of Jam Island"
+			},
+			"2": {
+				"ja_jp": "カレー洋制圧戦",
+				"en_us": "Curry Ocean Pacification"
+			},
+			"3": {
+				"ja_jp": "リランカ島空襲",
+				"en_us": "Bombing of Ri Lanka"
+			},
+			"4": {
+				"ja_jp": "カスガダマ沖海戦",
+				"en_us": "Battle of Casgadama"
+			},
+			"5": {
+				"ja_jp": "カレー洋リランカ島沖",
+				"en_us": "Curry Ocean Ri-Lanka Island"
+			}
+		}
+	},
+	"5": {
+		"en_us": "Southern Area",
+		"ja_jp": "南方海域",
+		"maps": {
+			"1": {
+				"ja_jp": "南方海域前面",
+				"en_us": "The Forefront of the Southern Sea"
+			},
+			"2": {
+				"ja_jp": "珊瑚諸島沖",
+				"en_us": "The Coral Islands"
+			},
+			"3": {
+				"ja_jp": "サブ島沖海域",
+				"en_us": "Sav Island"
+			},
+			"4": {
+				"ja_jp": "サーモン海域",
+				"en_us": "The Slot Salmon Sea Area"
+			},
+			"5": {
+				"ja_jp": "サーモン海域北方",
+				"en_us": "Northern Salmon Sea Area"
+			}
+		}
+	},
+	"6": {
+		"en_us": "Central Area",
+		"ja_jp": "中部海域",
+		"maps": {
+			"1": {
+				"ja_jp": "中部海域哨戒線",
+				"en_us": "Central Waters Patrol Line"
+			},
+			"2": {
+				"ja_jp": "MS諸島沖",
+				"en_us": "MS Archipelago"
+			},
+			"3": {
+				"ja_jp": "グアノ環礁沖海域",
+				"en_us": "Guano Atoll Sea"
+			},
+			"4": {
+				"ja_jp": "中部北海域ピーコック島沖",
+				"en_us": "Peacock Island"
+			},
+			"5": {
+				"ja_jp": "KW環礁沖海域",
+				"en_us": "KW Atoll Sea"
+			}
+		}
+	},
+	"40":{
+		"en_us": "Showdown at Operation Shō-Gō! Battle of Leyte Gulf",
+		"ja_jp": "捷号決戦！邀撃、レイテ沖海戦(前篇)",
+		"maps": {
+			"1":{
+				"ja_jp": "第二遊撃部隊、抜錨！",
+				"en_us": "2nd Striking Force, Set Sail!"
+			},
+			"2":{
+				"ja_jp": "捷一号作戦、発動準備",
+				"en_us": " 1st Victory Operation, commence preparation!"
+			},
+			"3":{
+				"ja_jp": "捷一号作戦、作戦発動!",
+				"en_us": "Commence Operation Shō-Ichi-Gō! "
+			},
+			"4":{
+				"ja_jp": "あの海峡の先へ‐‐!",
+				"en_us": "Ahead of that Strait"
+			}
+		}
+	}
+}
