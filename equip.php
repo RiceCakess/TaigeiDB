@@ -24,70 +24,6 @@ $craftable = $row['craftable'];
 	<head>
 		<?php require_once ('includes/head.php');?>
 		<title><?php echo $name; ?>  Development</title>
-		<script>
-		$(document).ready(function(){
-			fetchConstructionData();
-		});
-		function fetchConstructionData(){
-			if(<?php echo $craftable; ?> == 0){
-				$("#development").prepend(
-				createAlert("danger","This equipment is currently not constructable!"));
-				return;
-			}
-			var fairy = addLoadingFairy("#development");
-			$.get("api/equip_dev",{id: <?php echo $id ?>, limit:8}).done(function(res) {
-				var devcard = $(".data-card#dev");
-				var tableBody = devcard.find("tbody");
-				if(res.data.length == 0){
-					return;
-				}
-				res.data.forEach(function(obj){
-					percent = (obj.count/obj.attempts) *100;
-					var row = $("<tr/>")
-						.append("<td>" + obj.fuel + "</td>")
-						.append("<td>" + obj.ammo + "</td>")
-						.append("<td>" + obj.steel + "</td>")
-						.append("<td>" + obj.bauxite + "</td>")
-						.append("<td>" + obj.count + "</td>")
-						.append("<td>" + obj.attempts + "</td>")
-						.append("<td>" + round(percent,4) +"%" + "</td>");
-						tableBody.append(row);
-				});
-			}).then(function(){
-				$.get("api/equip_dev/flagship",{id: <?php echo $id ?>, limit:5}).done(function(res) {
-					var devcard = $(".data-card#flagship");
-					var tableBody = devcard.find("tbody");
-					var promises = [];
-					var arr = [];
-					res.data.forEach(function(obj){
-						promises.push($.get("api/ships",{id: obj.flagship}).done(function(response) {
-							arr.push({
-								ship: response,
-								db: obj
-							});
-						}));
-					});
-					Promise.all(promises).then(function(){
-						arr.sort(function(a,b){
-							return b.db.count - a.db.count;
-						});
-						arr.forEach(function(obj){
-							var row = $("<tr/>")
-								.append("<td>" + createShipBanner(obj.ship.asset, obj.ship.en_us, obj.ship.type)[0].outerHTML + "</td>")
-								.append("<td>" + obj.ship.type + "</td>")
-								.append("<td>" + obj.db.count + "</td>");
-							tableBody.append(row);
-							//devcard.find(".card-block").append(createShipBanner(obj.ship.asset, obj.ship.en_us, obj.ship.type));
-						});
-						
-						$(fairy).remove();
-						$(".data-card#dev").removeClass("hidden");
-						devcard.removeClass("hidden");
-					});
-				});
-			});
-		}
-		</script>
 	</head>
 	<body>
 		
@@ -155,5 +91,67 @@ $craftable = $row['craftable'];
 			</div>
 		</div>
 		<?php include_once ('includes/footer.php'); ?>
+		<script>
+		fetchConstructionData();
+		function fetchConstructionData(){
+			if(<?php echo $craftable; ?> == 0){
+				$("#development").prepend(
+				createAlert("danger","This equipment is currently not constructable!"));
+				return;
+			}
+			var fairy = addLoadingFairy("#development");
+			$.get("api/equip_dev",{id: <?php echo $id ?>, limit:8}).done(function(res) {
+				var devcard = $(".data-card#dev");
+				var tableBody = devcard.find("tbody");
+				if(res.data.length == 0){
+					return;
+				}
+				res.data.forEach(function(obj){
+					percent = (obj.count/obj.attempts) *100;
+					var row = $("<tr/>")
+						.append("<td>" + obj.fuel + "</td>")
+						.append("<td>" + obj.ammo + "</td>")
+						.append("<td>" + obj.steel + "</td>")
+						.append("<td>" + obj.bauxite + "</td>")
+						.append("<td>" + obj.count + "</td>")
+						.append("<td>" + obj.attempts + "</td>")
+						.append("<td>" + round(percent,4) +"%" + "</td>");
+						tableBody.append(row);
+				});
+			}).then(function(){
+				$.get("api/equip_dev/flagship",{id: <?php echo $id ?>, limit:5}).done(function(res) {
+					var devcard = $(".data-card#flagship");
+					var tableBody = devcard.find("tbody");
+					var promises = [];
+					var arr = [];
+					res.data.forEach(function(obj){
+						promises.push($.get("api/ships",{id: obj.flagship}).done(function(response) {
+							arr.push({
+								ship: response,
+								db: obj
+							});
+						}));
+					});
+					Promise.all(promises).then(function(){
+						arr.sort(function(a,b){
+							return b.db.count - a.db.count;
+						});
+						arr.forEach(function(obj){
+							var row = $("<tr/>")
+								.append("<td>" + createShipBanner(obj.ship.asset, obj.ship.en_us, obj.ship.type)[0].outerHTML + "</td>")
+								.append("<td>" + obj.ship.type + "</td>")
+								.append("<td>" + obj.db.count + "</td>");
+							tableBody.append(row);
+							//devcard.find(".card-block").append(createShipBanner(obj.ship.asset, obj.ship.en_us, obj.ship.type));
+						});
+						
+						$(fairy).remove();
+						$(".data-card#dev").removeClass("hidden");
+						devcard.removeClass("hidden");
+					});
+				});
+			});
+		}
+		</script>
 	</body>
 </html>

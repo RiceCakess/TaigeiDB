@@ -1,17 +1,16 @@
 <footer class="footer">
 	<div class="container">
-		<ul>
-			<li>API</li>
-			<li>Contact</li>
-			<li>Privacy Policy</li>
-			<li>Feedback</li>
+		<ul class="footer-list">
+			<a href="#"><li>API</li></a>
+			<a href="mailto:contact@taigei.moe"><li>Contact</li></a>
+			<a href="mailto:feedback@taigei.moe"><li>Feedback</li></a>
 		</ul>
 		<span>Made with love by <a href="">Ricecakes</a></span>
-		<div class="text-muted">Original data kindly provided by OpenDB (Wolfkangkurz)</div>
+		<div>Original data kindly provided by OpenDB</div>
 		<?php 
 			$month = date('n'); 
 			$src = "";
-			if($month == 12 && $month <= 2){
+			if($month == 12 || $month <= 2){
 				$src = "assets/footer-taigei2.png";
 			}
 			else if($month >= 3 && $month <= 5){
@@ -29,3 +28,5 @@
 	</div>
 	<div class="footer-dot"/>
 </footer>
+<script src="js/common.js"></script>
+<script src="js/search-bar.js"></script>

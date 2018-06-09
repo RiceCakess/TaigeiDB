@@ -22,7 +22,7 @@ $sql = "SELECT world, map, maprank, node, letter, SUM(Scount) AS Scount, SUM(Aco
 		AND main.map=sub.map 
 		AND main.node=sub.node 
 		AND (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
-	LEFT JOIN kancolledb.nodes info
+	LEFT JOIN kancolle.nodes info
 		ON main.world=info.world 
 		AND main.map=info.map 
 		AND main.node=info.id 

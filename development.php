@@ -19,34 +19,11 @@ while($row = $rs->fetch_assoc()){
 	];
 }
 $json = json_encode($arr);
-//var_dump($arr);
 ?>
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
-		<title>Tagei - Development List</title>
-		<script>
-		$(document).ready(function(){
-			$json = <?php echo $json; ?>;
-			//console.log($json);
-			$json.forEach(function(obj){
-				if(!$("#" + obj.icon).length){
-					$card = $('<div class="card data-card category" id="' + obj.icon + '"></div>');
-					$card.append('<div class="card-header">' + obj.type + '</div>');
-					$card.append('<div class="card-block"><ul class="ship-list"></ul></div>');
-					$(".row").append($card);
-					var iconName = obj.iconName.toLowerCase();
-					iconName = iconName.split(" ").join("_").split("-").join("_");
-					
-					$(".nav-pills").append('<li class="nav-item"><a class="nav-link" href="#'+ obj.icon + '"><img src="'+ assetPath + "icons/plain/" + iconName +'.png"></a></li>');
-
-				}
-				
-				$("#" + obj.icon + " > .card-block > ul").append("<a href='equip?id=" + obj.id + "'><li>" + createEquipBanner(obj.id,obj.name)[0].outerHTML + "</li></a>");
-			});
-			addCollapse();
-		});
-		</script>
+		<title>Development List</title>
 	</head>
 	<body>
 		<div class="content">
@@ -59,7 +36,22 @@ $json = json_encode($arr);
 				</div>
 			</div>
 		</div>
-		
 		<?php include_once ('includes/footer.php'); ?>
+		<script>
+			$json = <?php echo $json; ?>;
+			$json.forEach(function(obj){
+				if(!$("#" + obj.icon).length){
+					$card = $('<div class="card data-card category" id="' + obj.icon + '"></div>');
+					$card.append('<div class="card-header">' + obj.type + '</div>');
+					$card.append('<div class="card-block"><ul class="ship-list"></ul></div>');
+					$(".row").append($card);
+					var iconName = obj.iconName.toLowerCase();
+					iconName = iconName.split(" ").join("_").split("-").join("_");
+					$(".nav-pills").append('<li class="nav-item"><a class="nav-link" href="#'+ obj.icon + '"><img src="'+ assetPath + "icons/plain/" + iconName +'.png"></a></li>');
+				}
+				$("#" + obj.icon + " > .card-block > ul").append("<a href='equip?id=" + obj.id + "'><li>" + createEquipBanner(obj.id,obj.name)[0].outerHTML + "</li></a>");
+			});
+			addCollapse();
+		</script>
 	</body>
 </html>

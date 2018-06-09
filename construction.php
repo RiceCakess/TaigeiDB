@@ -19,14 +19,26 @@ while($row = $rs->fetch_assoc()){
 	];
 }
 $json = json_encode($arr);
-//var_dump($arr);
 ?>
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
-		<title>Tagei - Construction List</title>
+		<title>Construction List</title>
+	</head>
+	<body>
+		<div class="content">
+			<?php require_once ('includes/navbar.php');?>
+			<div class="container full-page">
+				<div class="row">
+					<div class="page-header">Construction</div>
+					
+					<ul class="nav nav-pills">
+					</ul>
+				</div>
+			</div>
+		</div>
+		<?php include_once ('includes/footer.php'); ?>
 		<script>
-		$(document).ready(function(){
 			$json = <?php echo $json; ?>;
 			$json.forEach(function(obj){
 				if(!$("#" + obj.typeShort).length){
@@ -41,22 +53,6 @@ $json = json_encode($arr);
 				$("#" + obj.typeShort + " > .card-block > ul").append("<a href='ship?id=" + obj.id + "'><li>" + createShipBanner(obj.asset, obj.name)[0].outerHTML +"</li></a>");
 			});
 			addCollapse();
-		});
 		</script>
-	</head>
-	<body>
-		<div class="content">
-			<?php require_once ('includes/navbar.php');?>
-			<div class="container full-page">
-				<div class="row">
-					<div class="page-header">Construction</div>
-					
-					<ul class="nav nav-pills">
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		<?php include_once ('includes/footer.php'); ?>
 	</body>
 </html>

@@ -197,13 +197,19 @@ th > i{
 }
 .footer-taigei{
 	position: absolute; 
-	bottom: -21px; /*padding + border height = 21*/
+	bottom: -24px; /*padding + border height = 21*/
 	right: 0;
 	z-index: 5;
 }
 .footer-dot{
 	border-bottom: 6px dashed white; 
 	width: 100%;
+}
+.footer-list > a{
+	color: #D46B86;
+}
+.footer-list > a:hover{
+	color: #de8099;
 }
 /* Data card */
 .data-card > .card-block{

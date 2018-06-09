@@ -22,7 +22,7 @@
 		</button>
 		<a class="navbar-brand" href="./">
 			<img src="assets/icon/icon_48.png" width="38px">
-			Taigei DB
+			Taigei
 		</a>
 		
 		<div class="collapse navbar-collapse" id="navbarToggler">

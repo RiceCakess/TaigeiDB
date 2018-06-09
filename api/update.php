@@ -1,5 +1,6 @@
 <?php
-	require 'config.php';
+	require_once('../util/config.php');
+	$conn = new mysqli($DBServer, $DBUser, $DBPass, $infoDB);
 	
 	if ($_SERVER['REQUEST_METHOD'] != 'POST'){
 		return;
@@ -11,7 +12,6 @@
 		
 		$sql = "INSERT INTO updates (`source`,`message`) VALUES('$source','$msg')";
 		$conn->query($sql);
-		echo "yes?";
 	}
 	else{
 		http_response_code(500);

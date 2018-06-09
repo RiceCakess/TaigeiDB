@@ -35,7 +35,7 @@ AND world=$world
 AND map=$map
 AND (CASE WHEN  world > 6 THEN maprank=$maprank ELSE 1 END) 
 GROUP BY world, map, node, (CASE WHEN world > 6 THEN maprank END), result) main 
-INNER JOIN kancolledb.nodes info
+INNER JOIN kancolle.nodes info
 ON main.world=info.world 
 AND main.map=info.map 
 AND main.node=info.id 

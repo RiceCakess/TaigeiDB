@@ -35,11 +35,11 @@ AND world=$world
 AND map=$map
 AND (CASE WHEN  world > 6 THEN maprank=$maprank ELSE 1 END) 
 GROUP BY world, map, node, (CASE WHEN world > 6 THEN maprank END), result) main 
-LEFT JOIN kancolledb.nodes info
+LEFT JOIN kancolle.nodes info
 ON main.world=info.world 
 AND main.map=info.map 
 AND main.node=info.id
-LEFT JOIN kancolledb.ships shp
+LEFT JOIN kancolle.ships shp
 ON main.result=shp.id 
 GROUP BY world, map, (CASE WHEN letter is NOT NULL THEN letter ELSE node END), main.result
 ORDER BY info.letter ASC, shp.exclusive DESC, success DESC";

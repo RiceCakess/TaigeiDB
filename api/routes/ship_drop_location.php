@@ -34,7 +34,7 @@ $sql = "SELECT world, map, maprank, letter, SUM(Scount) AS Scount, SUM(Acount) A
 				AND main.map=sub.map 
 				AND main.node=sub.node
 				AND (CASE WHEN main.world > 6 THEN main.maprank=sub.maprank ELSE 1 END)
-			INNER JOIN kancolledb.nodes info
+			INNER JOIN kancolle.nodes info
 				ON main.world=info.world 
 				AND main.map=info.map 
 				AND main.node=info.id 
@@ -45,7 +45,7 @@ $sql = "SELECT world, map, maprank, letter, SUM(Scount) AS Scount, SUM(Acount) A
 $nodesql = "SELECT main.world, main.map, letter, main.count 
 			FROM (SELECT * FROM opendb.db_node_counts 
 					WHERE world=$world AND map=$map AND (CASE WHEN  world > 6 THEN maprank=$maprank ELSE 1 END)) main 
-			INNER JOIN kancolledb.nodes sub 
+			INNER JOIN kancolle.nodes sub 
 			ON main.world=sub.world 
 			AND main.map=sub.map 
 			AND main.node=sub.id";

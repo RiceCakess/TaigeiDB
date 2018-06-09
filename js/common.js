@@ -1,8 +1,6 @@
 var assetPath = "assets/KanColleAssets/";
-$(document).ready(function(){
-	addCollapse();
-	addSort();
-});
+addCollapse();
+addSort();
 function addCollapse(callback){
 	$(".data-card").each((index, value)=>{
 		var header = $(value).children(".card-header");

@@ -27,6 +27,53 @@ $lastupdate = $row["regis"];
 	<head>
 		<?php require_once ('includes/head.php');?>
 		<title></title>
+	</head>
+	<body>
+		<div class="content">
+			<?php require_once ('includes/navbar.php');?>
+			<div class="container full-page">
+				<div class="row">
+					<div class="col-lg-3 info-col">
+						<div class="card">
+							<div class="card-header">
+								
+							</div>
+							<ul class="list-group list-group-flush">
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9 data-col">
+						<div class="page-header map-name"></div>
+						<div class="map-img" style="text-align: center; margin: 10px;">
+							<img src="">
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+								<label>Nodes:</label>
+								<ul class="nav nav-pills">
+								</ul>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group" <?php if($maprank == 0) echo "hidden"; ?>>
+									<label for="diff">Difficulty</label>
+									<select class="form-control" id="diff">
+										<option <?php if($maprank == 1) echo "selected"?> value="1">Easy</option>
+										<option <?php if($maprank == 2) echo "selected"?> value="2">Medium</option>
+										<option <?php if($maprank == 3) echo "selected"?> value="3">Hard</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="nodes" style="display: none;">
+						
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<?php include_once ('includes/footer.php'); ?>
 		<script>
 		var world = <?php echo $world; ?>;
 		var map = <?php echo $map; ?>;
@@ -76,7 +123,6 @@ $lastupdate = $row["regis"];
 						
 						node.drops.forEach(function(drop, index2){
 							
-							//var drop = node.drops[i];
 							var percent = (drop.success/attempts) *100;
 							if(drop.result != 0)
 								var row = $("<tr/>")
@@ -86,14 +132,10 @@ $lastupdate = $row["regis"];
 								.append("<td>" + drop.Brank + "</td>")
 								.append("<td>" + drop.success + "</td>")
 								.append("<td>" + round(percent,4) +"%" + "</td>");
-								//console.log(!drop.ship.id)
 								if(drop.ship.id != 0 && drop.ship.id)
 									$("#" + letter + " > .card-block > .drop-table > tbody").append(row);
-								//p1.push($.get("api/ships",{id: drop.result}).done(function(response) {
-								//}));
 						});
 					}
-					//console.log(index + " " + Object.keys(res.data).length);
 					//After functon finishes
 					if(index == Object.keys(res.data).length - 1){
 						$(".nav-pills").append('<li class="nav-item"><a class="nav-link" href="#all">Show all</a></li>');
@@ -126,55 +168,7 @@ $lastupdate = $row["regis"];
 					}
 				});
 			});
-			
 		});
 		</script>
-	</head>
-	<body>
-		<div class="content">
-			<?php require_once ('includes/navbar.php');?>
-			<div class="container full-page">
-				<div class="row">
-					<div class="col-lg-3 info-col">
-						<div class="card">
-							<div class="card-header">
-								
-							</div>
-							<ul class="list-group list-group-flush">
-							</ul>
-						</div>
-					</div>
-					<div class="col-lg-9 data-col">
-						<div class="page-header map-name"></div>
-						<div class="map-img" style="text-align: center; margin: 10px;">
-							<img src="">
-						</div>
-						<div class="row">
-							<div class="col-md-9">
-								<label>Nodes:</label>
-								<ul class="nav nav-pills">
-								</ul>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group" <?php if($maprank == 0) echo "hidden"; ?>>
-									<label for="diff">Difficulty</label>
-									<select class="form-control" id="diff">
-										<option <?php if($maprank == 1) echo "selected"?> value="1">Easy</option>
-										<option <?php if($maprank == 2) echo "selected"?> value="2">Medium</option>
-										<option <?php if($maprank == 3) echo "selected"?> value="3">Hard</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="nodes" style="display: none;">
-						
-						</div>
-						
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<?php include_once ('includes/footer.php'); ?>
 	</body>
 </html>

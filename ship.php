@@ -1,6 +1,7 @@
 <?php
 require 'util/config.php';
 $conn = mysqli_connect($DBServer, $DBUser, $DBPass, $infoDB);
+$conn->set_charset("utf8");
 $assetPath = "assets/KanColleAssets/";
 $id = 0;
 if(isset($_GET["id"]) && is_numeric($_GET["id"])){
@@ -12,7 +13,7 @@ else{
 	return;
 }
 
-$sql = "SELECT * FROM ships WHERE id=" . $conn->real_escape_string($id);
+$sql = "SELECT shp.*, typ.en_us type FROM ships shp INNER JOIN shipTypes typ ON shp.type = typ.id WHERE shp.id=" . $conn->real_escape_string($id);
 $rs = $conn->query($sql);
 $no = $asset = $name = $type = $suffix = $wiki = 0;
 if(!$rs || $rs->num_rows <= 0){
@@ -20,36 +21,35 @@ if(!$rs || $rs->num_rows <= 0){
 	include('404.php'); 
 	return;
 }
-$row = $rs->fetch_assoc();
-$no = $row["no"];
+$shipInfo = $rs->fetch_assoc();
+/*$no = $row["no"];
 $asset = $row["asset"];
 $name = $row['en_us'];
 $suffix = $row['suffix'];
 $wiki = $row['wiki'];
-$buildtime = $row['buildtime'];
+$buildtime = $row['buildtime'];*/
 ?>
 <html>
 	<head>
 		<?php require_once ('includes/head.php');?>
-		<title><?php echo $name ?> Construction/Drop</title>
-	
+		<title><?php echo $shipInfo["en_us"]; ?> Construction/Drop</title>
 	</head>
 	<body>
 		
 		<div class="content">
 			<?php require_once ('includes/navbar.php');?>
 			<div class="container full-page">
-				<!--<img class="ship-bg" src="<?php echo $assetPath . "ships/" . $asset . "/17.png" ?>"/>!-->
-				<div class="ship-no">No. <?php echo $no ?></div>
+				<!--<img class="ship-bg" src="<?php echo $assetPath . "ships/" . $shipInfo["asset"] . "/17.png" ?>"/>!-->
+				<div class="ship-no">No. <?php echo $shipInfo["no"] ?></div>
 				<div class="row">	
 					<div class="col-lg-3 info-col">
 						<center>
 							<div class="card ship-card">
-								<img class="card-img-top" src="<?php echo $assetPath . "ships/" . $asset . "/5.png" ?>">
+								<img class="card-img-top" src="<?php echo $assetPath . "ships/" . $shipInfo["asset"] . "/5.png" ?>">
 								<div class="card-footer">
-									<?php echo $name; ?>
+									<?php echo $shipInfo["en_us"] . " (" . $shipInfo["ja_jp"] . ")"; ?>
 									<br>
-									<a href="<?php echo $wiki; ?>">Wiki</a>
+									<?php echo $shipInfo["type"]; ?> - <a href="<?php echo $shipInfo["wiki"]; ?>">Wikia</a>
 								</div>
 							</div>
 						</center>
@@ -177,10 +177,9 @@ $buildtime = $row['buildtime'];
 				</div>
 			</div>
 		</div>
-		
+		<?php include_once ('includes/footer.php'); ?>
 		<script>
 		var current_event = <?php echo $current_event; ?>;
-
 		$(document).ready(function(){
 			//prevent anchor jump to middle of page
 			if (location.hash) {
@@ -196,7 +195,6 @@ $buildtime = $row['buildtime'];
 			if(hash === "drop"){
 				fetchDropTable();
 				$("a[href='#drop']").tab('show');
-				dropBuilt = true;
 			}
 			else{
 				fetchConstructionData();
@@ -269,7 +267,6 @@ $buildtime = $row['buildtime'];
 								.append("<td>" + obj.ship.type + "</td>")
 								.append("<td>" + obj.db.count + "</td>");
 							tableBody.append(row);
-							//devcard.find(".card-block").append(createShipBanner(obj.ship.asset, obj.ship.en_us, obj.ship.type));
 						});
 						
 						$(fairy).remove();
@@ -313,7 +310,6 @@ $buildtime = $row['buildtime'];
 					if(obj.count < 10 && obj.world <=6 || (obj.maprank == 0 && obj.world > 6)){
 						return;
 					}
-					//console.log(obj);
 					percent = (obj.success/obj.attempts) *100;
 					var row = $("<tr/>")
 						.append("<td><a href='drop?world=" 
@@ -347,7 +343,6 @@ $buildtime = $row['buildtime'];
 			});
 		}
 		</script>
-		<?php include_once ('includes/footer.php'); ?>
 	</body>
 	
 </html>
